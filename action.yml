@@ -1,0 +1,19 @@
+name: Cleanup Workspace Directory
+description: Deletes all the content inside the currently running action's workspace directory.
+runs:
+  using: composite
+  steps:
+    # Clenaup on Linux/macOS
+    - name: Cleanup Workspace
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        rm -rf ${{github.workspace}}/*
+        rm -rf ${{github.workspace}}/.* 2> /dev/null || :
+
+    # Cleanup on Windows
+    - name: Clean workspace on Windows
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Force | Remove-Item -Force -Recurse
