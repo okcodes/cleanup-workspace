@@ -16,4 +16,8 @@ runs:
       if: runner.os == 'Windows'
       shell: powershell
       run: |
-        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Force | Remove-Item -Force -Recurse
+        if (Test-Path -Path ${{ github.workspace }}) {
+            Get-ChildItem -Path ${{ github.workspace }} -Recurse -Force | Remove-Item -Force -Recurse
+        } else {
+            Write-Host "The path does not exist."
+        }
